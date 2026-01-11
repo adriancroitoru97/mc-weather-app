@@ -184,7 +184,6 @@ fun OneCallHourly.toForecastEntity(cityId: Int): ForecastEntity {
 }
 
 
-
 fun OneCallDaily.toForecastEntity(cityId: Int): ForecastEntity {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val dateText = dateFormat.format(Date(timestamp * 1000))
