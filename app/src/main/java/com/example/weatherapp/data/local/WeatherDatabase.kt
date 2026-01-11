@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.weatherapp.data.local.dao.CityDao
+import com.example.weatherapp.data.local.dao.ForecastDao
 import com.example.weatherapp.data.local.entity.CityEntity
 import com.example.weatherapp.data.local.entity.ForecastEntity
 
@@ -12,7 +15,11 @@ import com.example.weatherapp.data.local.entity.ForecastEntity
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class WeatherDatabase : RoomDatabase() {
+
+    abstract fun cityDao(): CityDao
+    abstract fun forecastDao(): ForecastDao
 
     companion object {
         @Volatile
