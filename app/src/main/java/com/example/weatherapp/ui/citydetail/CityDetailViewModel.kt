@@ -33,23 +33,23 @@ class CityDetailViewModel(
     private fun loadCityDetails() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            
+
             repository.getCityById(cityId)
                 .catch { e ->
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
                             error = e.message,
                             isLoading = false
-                        ) 
+                        )
                     }
                 }
                 .collect { city ->
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
                             city = city,
                             isLoading = false,
                             isRefreshing = false
-                        ) 
+                        )
                     }
                 }
         }
@@ -70,19 +70,21 @@ class CityDetailViewModel(
     fun refreshWeather() {
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true, error = null) }
-            
+
             when (repository.refreshWeatherForCity(cityId)) {
                 is Result.Success -> {
                     // Success handled by Flow
                 }
+
                 is Result.Error -> {
-                    _uiState.update { 
+                    _uiState.update {
                         it.copy(
                             isRefreshing = false,
                             error = "Failed to refresh weather"
-                        ) 
+                        )
                     }
                 }
+
                 is Result.Loading -> {
                     // Loading state
                 }
@@ -96,9 +98,11 @@ class CityDetailViewModel(
                 is Result.Success -> {
                     // Success handled by Flow
                 }
+
                 is Result.Error -> {
                     _uiState.update { it.copy(error = "Failed to refresh forecast") }
                 }
+
                 is Result.Loading -> {
                     // Loading state
                 }

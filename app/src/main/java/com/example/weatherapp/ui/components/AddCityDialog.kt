@@ -1,22 +1,38 @@
 package com.example.weatherapp.ui.components
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.LocationManager
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.LocationCity
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.location.LocationServices
-
 
 @Composable
 fun AddCityDialog(
@@ -64,7 +80,7 @@ fun AddCityDialog(
                 )
 
                 Button(
-                    onClick = { 
+                    onClick = {
                         if (cityName.isNotBlank()) {
                             onAddByName(cityName)
                         }
@@ -128,9 +144,9 @@ fun AddCityDialog(
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        if (locationPermissionsGranted) 
-                            "Use Current Location" 
-                        else 
+                        if (locationPermissionsGranted)
+                            "Use Current Location"
+                        else
                             "Grant Location Permission"
                     )
                 }
@@ -160,7 +176,7 @@ private fun getCurrentLocation(
 ) {
     try {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-        
+
         // Create location request
         val locationRequest = com.google.android.gms.location.LocationRequest().apply {
             priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -168,7 +184,7 @@ private fun getCurrentLocation(
             fastestInterval = 5000 // 5 seconds
             numUpdates = 1 // Only need one update
         }
-        
+
         val locationCallback = object : com.google.android.gms.location.LocationCallback() {
             override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
                 fusedLocationClient.removeLocationUpdates(this)
@@ -176,11 +192,15 @@ private fun getCurrentLocation(
                 if (location != null) {
                     onResult(location.latitude, location.longitude, null)
                 } else {
-                    onResult(null, null, "Location not available. Please enable location services and try again.")
+                    onResult(
+                        null,
+                        null,
+                        "Location not available. Please enable location services and try again."
+                    )
                 }
             }
         }
-        
+
         // First try to get last known location (fast)
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location ->
@@ -194,11 +214,15 @@ private fun getCurrentLocation(
                         locationCallback,
                         android.os.Looper.getMainLooper()
                     )
-                    
+
                     // Set a timeout - if no location after 15 seconds, return error
                     android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                         fusedLocationClient.removeLocationUpdates(locationCallback)
-                        onResult(null, null, "Location request timed out. Please check your location settings or try again.")
+                        onResult(
+                            null,
+                            null,
+                            "Location request timed out. Please check your location settings or try again."
+                        )
                     }, 15000)
                 }
             }
@@ -209,11 +233,15 @@ private fun getCurrentLocation(
                     locationCallback,
                     android.os.Looper.getMainLooper()
                 )
-                
+
                 // Set a timeout
                 android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                     fusedLocationClient.removeLocationUpdates(locationCallback)
-                    onResult(null, null, "Error getting location: ${e.message}. Please check your location settings.")
+                    onResult(
+                        null,
+                        null,
+                        "Error getting location: ${e.message}. Please check your location settings."
+                    )
                 }, 15000)
             }
     } catch (e: Exception) {
