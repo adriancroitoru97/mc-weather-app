@@ -99,7 +99,7 @@ fun CityListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { },
+                onClick = { showAddDialog = true },
                 containerColor = MaterialTheme.colorScheme.primaryContainer
             ) {
                 Icon(
@@ -187,12 +187,14 @@ fun CityListScreen(
 
         if (showAddDialog) {
             AddCityDialog(
-                onDismiss = { },
+                onDismiss = { showAddDialog = false },
                 onAddByName = { cityName ->
                     viewModel.addCityByName(cityName)
+                    showAddDialog = false
                 },
                 onAddByLocation = { lat, lon ->
                     viewModel.addCityByCoordinates(lat, lon)
+                    showAddDialog = false
                 },
                 locationPermissionsGranted = locationPermissions.allPermissionsGranted,
                 onRequestPermissions = { locationPermissions.launchMultiplePermissionRequest() }
@@ -202,7 +204,7 @@ fun CityListScreen(
         // Delete confirmation dialog
         cityToDelete?.let { city ->
             AlertDialog(
-                onDismissRequest = { },
+                onDismissRequest = { cityToDelete = null },
                 title = {
                     Text(
                         text = "Delete City",
@@ -217,6 +219,7 @@ fun CityListScreen(
                     TextButton(
                         onClick = {
                             viewModel.deleteCity(city.cityId)
+                            cityToDelete = null
                         },
                         colors = ButtonDefaults.textButtonColors(
                             contentColor = MaterialTheme.colorScheme.error
@@ -226,7 +229,7 @@ fun CityListScreen(
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = { }) {
+                    TextButton(onClick = { cityToDelete = null }) {
                         Text("Cancel")
                     }
                 }

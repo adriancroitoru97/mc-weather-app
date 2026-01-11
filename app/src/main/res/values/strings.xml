@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Weather App</string>
+    <string name="add_city">Add City</string>
+    <string name="search_cities">Search cities…</string>
+    <string name="no_cities">No cities added yet</string>
+    <string name="add_city_message">Add a city to see weather information</string>
+    <string name="refresh">Refresh</string>
+    <string name="delete">Delete</string>
+    <string name="favorite">Favorite</string>
+    <string name="details">Details</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="pressure">Pressure</string>
+    <string name="cloudiness">Cloudiness</string>
+    <string name="forecast">Forecast</string>
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
 </resources>
