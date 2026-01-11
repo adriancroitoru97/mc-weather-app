@@ -73,4 +73,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // Accompanist (for permissions)
+    implementation("com.google.accompanist:accompanist-permissions:0.35.1-alpha")
 }
